@@ -2,9 +2,11 @@
 
 @import "tw-animate-css";
 
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  --normal: 'Comfortaa';
   /* Core Nord Light Variables */
   --radius: 0.625rem;
   --background: hsl(220 16% 96%); /* theme-nord.light background */
@@ -128,4 +130,13 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+body {
+  font-family: "Comfortaa", sans-serif;
+  user-select: none;
+}
+
+button {
+  cursor: pointer;
 }
