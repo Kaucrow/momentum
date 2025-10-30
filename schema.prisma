@@ -1,0 +1,15 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgres"
+  url      = ""
+}
+
+model Tasks {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String
+  due         DateTime  @db.Timestamp(6)
+}
