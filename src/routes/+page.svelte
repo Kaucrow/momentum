@@ -14,12 +14,14 @@
     type DateValue,
     getLocalTimeZone
   } from "@internationalized/date";
+  import { enhance } from '$app/forms';
 
   const df = new DateFormatter("en-US", {
     dateStyle: "long"
   });
 
   let createTaskDialogOpen = $state<boolean>(false);
+  let createTaskDialogErr = $state<string | undefined>(undefined);
 
   let newTask: {
     name: string | undefined,
@@ -31,18 +33,13 @@
     dueDate: undefined
   });
 
-  const createTask = () => {
-    console.log(`Creating new task with name '${newTask.name}', description '${newTask.description}', and due date '${newTask.dueDate}'...`);
-    console.log('Task created!');
-    createTaskDialogOpen = false;
-  };
-
   const onCreateTaskDialogOpenChange = () => {
     newTask = {
       name: undefined,
       description: undefined,
       dueDate: undefined
     };
+    createTaskDialogErr = undefined;
   };
 </script>
 
@@ -52,7 +49,7 @@
     onOpenChangeComplete={onCreateTaskDialogOpenChange}
   >
     <Dialog.Trigger>
-      <Button>Create a task</Button>
+      <div class={cn(buttonVariants())}>Create a task</div>
     </Dialog.Trigger>
     <Dialog.Content class="sm:max-w-[425px]">
       <Dialog.Header>
@@ -61,7 +58,7 @@
           Create a new task so hopefully you get it done!
         </Dialog.Description>
       </Dialog.Header>
-      <form onsubmit={createTask}>
+      <form onsubmit={() => { createTaskDialogOpen=false }} method="POST" action="?/createTask" use:enhance>
         <div class="grid gap-4 py-4">
           <!-- Name input -->
           <div class="grid grid-cols-1 sm:grid-cols-4 items-center gap-4">
@@ -99,6 +96,9 @@
         </div>
         <Dialog.Footer>
           <Button type="submit">Save</Button>
+          {#if createTaskDialogErr}
+            <div class="text-destructive">{createTaskDialogErr}</div>
+          {/if}
         </Dialog.Footer>
       </form>
     </Dialog.Content>
